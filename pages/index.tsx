@@ -1,25 +1,23 @@
 import XBase from "@/layouts/XBase";
 import { NextPageWithLayout } from "@/layouts/types";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Home: NextPageWithLayout = () => {
-  const router = useRouter();
-
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="inline-flex">
-        <button
-          className="rounded-l bg-forestGreen py-2 px-4 font-bold text-gray-800 hover:bg-green-300"
-          onClick={() => router.push("/countries")}
+        <Link
+          className="rounded-l bg-forestGreen px-4 py-2 font-bold text-gray-800 hover:bg-green-300"
+          href="/countries"
         >
           Countries
-        </button>
-        <button
-          className="rounded-r bg-forestGreen py-2 px-4 font-bold text-gray-800 hover:bg-green-300"
-          onClick={() => router.push("/profile")}
+        </Link>
+        <Link
+          className="rounded-r bg-forestGreen px-4 py-2 font-bold text-gray-800 hover:bg-green-300"
+          href="/profile"
         >
           Profile
-        </button>
+        </Link>
       </div>
     </div>
   );

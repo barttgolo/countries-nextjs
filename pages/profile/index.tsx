@@ -1,33 +1,26 @@
 import XBase from "@/layouts/XBase";
 import { NextPageWithLayout } from "@/layouts/types";
 import { useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
 import Spinner from "@/components/Spinner";
 import ClientOnly from "@/components/ClientOnly";
 import { GetProfileQuery } from "@/gql/schema/graphql";
 import { GET_PROFILE } from "@/gql/queries";
+import Link from "next/link";
 
 type ProfileProps = {
   country: Exclude<GetProfileQuery["country"], undefined | null>;
 };
 
 const Profile = ({ country }: ProfileProps) => {
-  const router = useRouter();
-
   return (
     <div className="flex h-screen items-center justify-center">
-      <div
-        className="hover: cursor-pointer rounded-md border-2 border-solid  border-green-800 bg-forestGreen p-5"
-        onClick={() =>
-          router.push({
-            pathname: "/countries/[code]",
-            query: { code: country.code.toLowerCase() },
-          })
-        }
+      <Link
+        className="rounded-md border-2 border-solid border-green-800  bg-forestGreen p-5 hover:cursor-pointer"
+        href={`/countries/${country.code.toLowerCase()}`}
       >
         <p>Name: {country.name}</p>
         <p>Code: {country.code}</p>
-      </div>
+      </Link>
     </div>
   );
 };
@@ -39,7 +32,7 @@ const Profile = ({ country }: ProfileProps) => {
  * If the data is loaded, show the `Profile` component.
  *
  */
-const ProfileDataWrapper = () => {
+const ProfileDataWrapper: NextPageWithLayout = () => {
   const { data, error } = useQuery(GET_PROFILE, {
     variables: { code: "PL" },
   });
@@ -59,14 +52,12 @@ const ProfileDataWrapper = () => {
   return <Profile country={data.country} />;
 };
 
-const ProfileClientOnlyWrapper: NextPageWithLayout = () => (
-  <ClientOnly>
-    <ProfileDataWrapper />
-  </ClientOnly>
-);
-
-ProfileClientOnlyWrapper.getLayout = (page) => {
-  return <XBase>{page}</XBase>;
+ProfileDataWrapper.getLayout = (page) => {
+  return (
+    <XBase>
+      <ClientOnly>{page} </ClientOnly>
+    </XBase>
+  );
 };
 
-export default ProfileClientOnlyWrapper;
+export default ProfileDataWrapper;

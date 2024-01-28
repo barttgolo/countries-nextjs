@@ -4,31 +4,24 @@ import { NextPageWithLayout } from "@/layouts/types";
 import { graphQLClient } from "@/gql/client";
 import { ALL_COUNTRIES } from "@/gql/queries";
 import { AllCountriesQuery } from "@/gql/schema/graphql";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 type CountriesProps = {
   countries: AllCountriesQuery["countries"];
 };
 
 const Countries: NextPageWithLayout<CountriesProps> = ({ countries }) => {
-  const router = useRouter();
-
   return (
     <div className="grid grid-cols-4 gap-4 p-10">
       {countries.map((country) => (
-        <div
-          className="hover: cursor-pointer rounded-md border-2 border-solid border-green-800 bg-forestGreen p-5"
+        <Link
+          className="rounded-md border-2 border-solid border-green-800 bg-forestGreen p-5 hover:cursor-pointer"
           key={country.code}
-          onClick={() =>
-            router.push({
-              pathname: "/countries/[code]",
-              query: { code: country.code.toLowerCase() },
-            })
-          }
+          href={`/countries/${country.code.toLowerCase()}`}
         >
           <p>Name: {country.name}</p>
           <p>Code: {country.code}</p>
-        </div>
+        </Link>
       ))}
     </div>
   );
